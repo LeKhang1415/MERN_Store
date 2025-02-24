@@ -1,0 +1,7 @@
+node_modules/
+
+# Bỏ qua các file môi trường
+.env
+
+# Bỏ qua các file build
+dist/
