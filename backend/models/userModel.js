@@ -22,7 +22,6 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: [true, "A user must have a password"],
             minLength: [8, "Password must be at least 8 characters"],
-            select: false,
         },
     },
     {
