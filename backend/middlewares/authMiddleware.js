@@ -1,5 +1,7 @@
-const { BadRequestError, AuthFailureError } = require("../core/errorResponse");
+const { AuthFailureError } = require("../core/errorResponse");
+const User = require("../models/userModel");
 const handelAsync = require("../utils/handelAsync");
+const jwt = require("jsonwebtoken");
 
 const protect = handelAsync(async (req, res, next) => {
     let token = req.cookies?.jwt || null;
@@ -20,9 +22,7 @@ const protect = handelAsync(async (req, res, next) => {
         console.log("Decoded Token:", decoded);
 
         // Kiểm tra người dùng có tồn tại không
-        const currentUser = await User.findById(
-            decoded.id || decoded._id
-        ).select("-password");
+        const currentUser = await User.findById(decoded.id).select("-password");
         if (!currentUser) {
             throw new AuthFailureError(
                 "Người dùng thuộc token này không còn tồn tại."

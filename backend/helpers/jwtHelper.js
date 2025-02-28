@@ -9,7 +9,7 @@ const signOptions = {
 };
 
 const generateToken = (payload, res) => {
-    const token = jwt.sign({ payload }, process.env.JWT_SECRET, signOptions);
+    const token = jwt.sign(payload, process.env.JWT_SECRET, signOptions);
 
     // Thiết lập cookie chứa token
     res.cookie("jwt", token, {
