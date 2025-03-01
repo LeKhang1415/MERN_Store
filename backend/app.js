@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true })); // Xử lý dữ liệu từ fo
 app.use(cookieParser());
 
 // Khởi tạo routes
-app.use("/", Routes);
+app.use("/api/", Routes);
 
 // Xử lý lỗi
 app.use((req, res, next) => {
