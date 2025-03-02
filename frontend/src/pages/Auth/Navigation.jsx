@@ -10,8 +10,14 @@ import { FaHeart } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "./Navigation.css";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../../redux/features/auth/authSlice";
+import { useLogoutMutation } from "../../redux/api/userApiSlice";
+import { toast } from "react-toastify";
 
 function Navigation() {
+    const userInfo = useSelector((state) => state.auth.userInfo);
+
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [showSidebar, setShowSidebar] = useState(false);
 
@@ -23,6 +29,22 @@ function Navigation() {
     };
     const closeSidebar = () => {
         setShowSidebar(false);
+    };
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [logoutApiCall] = useLogoutMutation();
+
+    const logoutHandler = async () => {
+        try {
+            await logoutApiCall().unwrap(); // Gọi API logout
+            dispatch(logout());
+            toast.success("Đăng xuất thành công!");
+            navigate("/login"); // Chuyển hướng về trang đăng nhập
+        } catch (error) {
+            console.error("Lỗi khi đăng xuất:", error);
+            toast.error("Lỗi khi đăng xuất. Vui lòng thử lại!");
+        }
     };
 
     return (
@@ -68,6 +90,20 @@ function Navigation() {
                     </span>
                 </Link>
             </div>
+
+            <div className="relative">
+                <button
+                    onClick={toggleDropDown}
+                    className="flex items-center text-gray-800 focus:outline-none"
+                >
+                    {userInfo ? (
+                        <span className="text-white">{userInfo.name}</span>
+                    ) : (
+                        <></>
+                    )}
+                </button>
+            </div>
+
             <ul>
                 <li>
                     <Link
