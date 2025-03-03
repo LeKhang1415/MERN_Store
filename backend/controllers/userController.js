@@ -37,8 +37,11 @@ const createUser = handleAsync(async (req, res) => {
     const token = generateToken(payload, res);
 
     const metadata = {
-        user: newUser,
         token,
+        username: newUser.name,
+        email: newUser.email,
+        id: newUser._id,
+        role: newUser.role,
     };
 
     const message = "Tạo user mới thành công";
@@ -67,6 +70,10 @@ const login = handleAsync(async (req, res, next) => {
 
     const metadata = {
         token,
+        username: userHolder.name,
+        email: userHolder.email,
+        id: userHolder._id,
+        role: userHolder.role,
     };
 
     const message = "Đăng nhập thành công";
@@ -137,7 +144,7 @@ const updateCurrentUserProfile = handelAsync(async (req, res, next) => {
 
     const metadata = {
         userId: updatedUser._id,
-        name: updatedUser.name,
+        username: updatedUser.name,
         email: updatedUser.email,
         role: updatedUser.role,
     };

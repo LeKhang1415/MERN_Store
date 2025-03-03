@@ -12,7 +12,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
         }),
         register: builder.mutation({
             query: (data) => ({
-                url: `${USERS_URL}`,
+                url: `${USERS_URL}/register`,
                 method: "POST",
                 body: data,
             }),
@@ -23,8 +23,26 @@ export const userApiSlice = apiSlice.injectEndpoints({
                 method: "POST",
             }),
         }),
+        profile: builder.mutation({
+            query: (data) => {
+                const token = localStorage.getItem("token");
+                return {
+                    url: `${USERS_URL}/updateme`,
+                    method: "PATCH",
+                    body: data,
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                };
+            },
+        }),
     }),
 });
 
-export const { useLoginMutation, useLogoutMutation, useRegisterMutation } =
-    userApiSlice;
+export const {
+    useLoginMutation,
+    useLogoutMutation,
+    useRegisterMutation,
+    useProfileMutation,
+} = userApiSlice;
