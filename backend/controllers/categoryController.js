@@ -4,7 +4,7 @@ const { BadRequestError, NotFoundError } = require("../core/errorResponse");
 const { CREATED, SuccessResponse } = require("../core/successResponse");
 const handelAsync = require("../utils/handelAsync");
 
-const createCategory = handelAsync(async (req, res, next) => {
+const createCategory = handleAsync(async (req, res, next) => {
     const { name } = req.body;
 
     // Kiểm tra dữ liệu đầu vào
@@ -28,8 +28,8 @@ const createCategory = handelAsync(async (req, res, next) => {
     return new CREATED({ metadata, message }).send(res);
 });
 
-const updateCategoryById = handelAsync(async (req, res, next) => {
-    const category = await User.findById(req.params.id);
+const updateCategoryById = handleAsync(async (req, res, next) => {
+    const category = await Category.findById(req.params.categoryId);
 
     if (!category) {
         throw new NotFoundError("Không tìm thấy danh mục.");
@@ -52,6 +52,49 @@ const updateCategoryById = handelAsync(async (req, res, next) => {
     return new SuccessResponse({ metadata }).send(res);
 });
 
+const deleteCategoryById = handleAsync(async (req, res, next) => {
+    const deletedCategory = await Category.findByIdAndRemove(
+        req.params.categoryId
+    );
+
+    if (!deletedCategory) {
+        throw new NotFoundError("Không tìm thấy danh mục.");
+    }
+
+    const metadata = {
+        deletedCategory,
+    };
+
+    return new SuccessResponse({ metadata }).send(res);
+});
+
+const getAllCategory = handelAsync(async (req, res, next) => {
+    const categories = await Category.find({});
+
+    const metadata = {
+        result: categories.length,
+        categories,
+    };
+
+    return new SuccessResponse({ metadata }).send(res);
+});
+
+const getCategoryById = handelAsync(async (req, res, next) => {
+    const category = await Category.findById(req.params.categoryId);
+
+    if (!category) throw new NotFoundError("Không tìm thấy danh mục");
+
+    const metadata = {
+        category,
+    };
+
+    return new SuccessResponse({ metadata }).send(res);
+});
+
 module.exports = {
     createCategory,
+    updateCategoryById,
+    deleteCategoryById,
+    getAllCategory,
+    getCategoryById,
 };
