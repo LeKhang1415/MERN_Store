@@ -2,7 +2,6 @@ const Category = require("../models/categoryModel");
 const handleAsync = require("../utils/handelAsync");
 const { BadRequestError, NotFoundError } = require("../core/errorResponse");
 const { CREATED, SuccessResponse } = require("../core/successResponse");
-const handelAsync = require("../utils/handelAsync");
 
 const createCategory = handleAsync(async (req, res, next) => {
     const { name } = req.body;
